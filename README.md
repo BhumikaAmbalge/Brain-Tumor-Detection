@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Brain Tumor Detection Using Deep Learning
 
 A medical imaging application that automatically detects the presence of brain tumors from MRI images using deep learning techniques. The system helps doctors and medical professionals in early diagnosis and treatment planning.
@@ -51,3 +52,7 @@ A medical imaging application that automatically detects the presence of brain t
 
 ```bash
 git clone https://github.com/<your-username>/brain-tumor-detection.git
+=======
+# Brain-Tumor-Detection-Using-Deep-Learning
+“A deep learning-based medical imaging application that automatically detects brain tumors from MRI scans, helping doctors with early diagnosis and accurate classification. Built with Python, TensorFlow/Keras, and image processing libraries, it provides high accuracy and a user-friendly interface.”
+>>>>>>> d10d7edf00d30a3ca038791e171d9522585e0567
