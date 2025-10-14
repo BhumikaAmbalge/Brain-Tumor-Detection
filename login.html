@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Tumor Detection - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+  
+  <div class="login-container">
+    <h2>Brain Tumor Detection</h2>
+
+    <!-- Background Video -->
+  <video autoplay muted loop class="bg-video">
+    <source src="159049-818026306_medium.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+
+    <!-- Login Form -->
+    <form id="loginForm" class="form-box">
+      <input type="text" id="loginUser" placeholder="Username" required>
+      <input type="password" id="loginPass" placeholder="Password" required>
+      <button type="submit"id="one">Login</button>
+      <p class="switch-text">Don't have an account? <a href="#" id="showRegister">Register</a></p>
+    </form>
+ 
+
+
+    <!-- Registration Form -->
+    <form id="registerForm" class="form-box hidden">
+      <input type="text" id="regUser" placeholder="New Username" required>
+      <input type="password" id="regPass" placeholder="New Password" required>
+      <button type="submit">Register</button>
+      <p class="switch-text">Already have an account? <a href="#" id="showLogin">Login</a></p>
+    </form>
+
+    <p id="errorMsg" class="error"></p>
+  </div>
+  
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+/* General */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #2c3e50;
+}
+
+.bg-video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1; /* keeps video behind */
+  object-fit: cover;
+}
+
+.login-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+}
+
+
+/* Login Page */
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(120deg, #2980b9, #6dd5fa);
+}
+
+.login-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+  width: 320px;
+  text-align: center;
+}
+
+.form-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.form-box button {
+  width: 100%;
+  padding: 12px;
+  background: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-box button:hover {
+  background: #1f618d;
+}
+
+.switch-text {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* Main Page */
+header {
+  background: #2c3e50;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.upload-section, .result-section {
+  margin: 40px auto;
+  padding: 20px;
+  width: 80%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+}
+
+.upload-section form {
+  text-align: center;
+}
+
+.upload-section input[type="file"] {
+  margin: 15px 0;
+}
+
+.upload-section button {
+  padding: 10px 20px;
+  background: #f16161;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+<button type="submit" 
+        style="padding:8px 18px; background:#3f51b5; color:white; 
+               border:none; border-radius:6px; font-weight:bold; 
+               cursor:pointer; transition:all 0.3s ease;">
+  Analyze
+</button>
+
+.upload-section button:hover {
+  background: #5d8d71;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #ecf0f1;
+  margin-top: 30px;
+}
+.hidden {
+  display: none;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+}
+#one{
+  width:345px;
+}
+#logoutBtn:hover {
+  background:#e60000;
+  transform: scale(1.05);
+}
