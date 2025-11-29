@@ -21,25 +21,25 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   // Load from local storage on mount
   useEffect(() => {
-    const savedReports = localStorage.getItem('neuroscan_reports');
+    const savedReports = localStorage.getItem('neuroscan_reports_v2');
     if (savedReports) {
       try {
         setReports(JSON.parse(savedReports));
       } catch (e) {
         console.error('Failed to parse reports', e);
-        setReports(MOCK_HISTORY); // Fallback
+        setReports([]); // Fallback to empty
       }
     } else {
       // Initialize empty if no saved data
       setReports([]);
-      localStorage.setItem('neuroscan_reports', JSON.stringify([]));
+      localStorage.setItem('neuroscan_reports_v2', JSON.stringify([]));
     }
   }, []);
 
   const addReport = (report: FullReport) => {
     const updatedReports = [report, ...reports];
     setReports(updatedReports);
-    localStorage.setItem('neuroscan_reports', JSON.stringify(updatedReports));
+    localStorage.setItem('neuroscan_reports_v2', JSON.stringify(updatedReports));
   };
 
   // Calculate dynamic stats
