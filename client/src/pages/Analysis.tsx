@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import PatientForm from '@/components/PatientForm';
 import MRIUpload from '@/components/MRIUpload';
 import AnalysisResultView from '@/components/AnalysisResult';
-import { PatientDetails, AnalysisResult, TumorType } from '@/lib/types';
+import { PatientDetails, AnalysisResult, TumorType, FullReport } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Check, ChevronRight, Loader2 } from 'lucide-react';
+import { useData } from '@/lib/store'; // Import the context hook
 
 // Images for mock analysis
 import gliomaImage from '@assets/generated_images/mri_scan_of_a_human_brain_showing_a_glioma_tumor.png';
@@ -18,6 +19,7 @@ import { TUMOR_INFO } from '@/lib/mockData';
 type Step = 'details' | 'upload' | 'analyzing' | 'result';
 
 export default function Analysis() {
+  const { addReport } = useData(); // Access global store
   const [step, setStep] = useState<Step>('details');
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -26,7 +28,7 @@ export default function Analysis() {
   const handlePatientSubmit = (data: Omit<PatientDetails, 'id' | 'date'>) => {
     setPatientData({
       ...data,
-      id: `PAT-${Math.floor(Math.random() * 10000)}`,
+      id: `PAT-${Math.floor(1000 + Math.random() * 9000)}`, // Random 4 digit ID
       date: new Date().toISOString()
     });
     setStep('upload');
@@ -48,13 +50,9 @@ export default function Analysis() {
       else if (randomType === 'pituitary') resultImage = pituitaryImage;
       else resultImage = healthyImage;
 
-      // If user uploads a specific file, we might want to use that preview, 
-      // but for this prototype we swap to our "detected" image to match the class
-      // In a real app, the backend would process the uploaded image.
-      // For better UX here, let's assume the uploaded image IS the one we have.
-      
+      // Create the result object
       const mockResult: AnalysisResult = {
-        id: `SCAN-${Math.floor(Math.random() * 10000)}`,
+        id: `SCAN-${Math.floor(1000 + Math.random() * 9000)}`,
         patientId: patientData?.id || 'UNKNOWN',
         tumorType: randomType,
         confidence: 0.85 + Math.random() * 0.14, // 85-99%
@@ -65,6 +63,18 @@ export default function Analysis() {
       };
       
       setResult(mockResult);
+      
+      // SAVE TO GLOBAL STORE
+      if (patientData) {
+        const fullReport: FullReport = {
+          ...patientData,
+          ...mockResult,
+          // Ensure date formats align
+          date: patientData.date, 
+        };
+        addReport(fullReport);
+      }
+
       setStep('result');
     }, 3000); // 3 second processing simulation
   };

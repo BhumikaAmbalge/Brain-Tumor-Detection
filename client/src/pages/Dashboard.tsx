@@ -1,22 +1,22 @@
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { MOCK_HISTORY } from '@/lib/mockData';
 import { Activity, Users, Brain, CheckCircle, AlertTriangle } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+import { useData } from '@/lib/store'; // Import global store
 
 export default function Dashboard() {
-  const totalScans = 1248;
-  const tumorDetected = 842;
-  const healthy = 406;
-  const accuracy = 98.5;
+  const { stats, reports } = useData(); // Use real data from context
 
+  // Calculate distribution dynamically
   const tumorDistribution = [
-    { name: 'Glioma', value: 350, color: 'hsl(var(--chart-1))' },
-    { name: 'Meningioma', value: 280, color: 'hsl(var(--chart-2))' },
-    { name: 'Pituitary', value: 212, color: 'hsl(var(--chart-3))' },
-    { name: 'No Tumor', value: 406, color: 'hsl(var(--muted))' },
+    { name: 'Glioma', value: reports.filter(r => r.tumorType === 'glioma').length, color: 'hsl(var(--chart-1))' },
+    { name: 'Meningioma', value: reports.filter(r => r.tumorType === 'meningioma').length, color: 'hsl(var(--chart-2))' },
+    { name: 'Pituitary', value: reports.filter(r => r.tumorType === 'pituitary').length, color: 'hsl(var(--chart-3))' },
+    { name: 'No Tumor', value: reports.filter(r => r.tumorType === 'notumor').length, color: 'hsl(var(--muted))' },
   ];
 
+  // Mock weekly activity data since we don't have real historical dates for everything in this prototype
+  // In a real app, we would aggregate `reports` by date.
   const weeklyActivity = [
     { name: 'Mon', scans: 45, detected: 30 },
     { name: 'Tue', scans: 52, detected: 35 },
@@ -43,8 +43,8 @@ export default function Dashboard() {
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalScans}</div>
-              <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+              <div className="text-2xl font-bold">{stats.totalScans}</div>
+              <p className="text-xs text-muted-foreground">Real-time count</p>
             </CardContent>
           </Card>
           <Card>
@@ -53,8 +53,12 @@ export default function Dashboard() {
               <AlertTriangle className="h-4 w-4 text-destructive" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{tumorDetected}</div>
-              <p className="text-xs text-muted-foreground">67% of total scans</p>
+              <div className="text-2xl font-bold">{stats.tumorDetected}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.totalScans > 0 
+                  ? `${((stats.tumorDetected / stats.totalScans) * 100).toFixed(1)}% of total` 
+                  : '0% of total'}
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -63,8 +67,12 @@ export default function Dashboard() {
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{healthy}</div>
-              <p className="text-xs text-muted-foreground">33% of total scans</p>
+              <div className="text-2xl font-bold">{stats.healthy}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.totalScans > 0 
+                  ? `${((stats.healthy / stats.totalScans) * 100).toFixed(1)}% of total` 
+                  : '0% of total'}
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -73,7 +81,7 @@ export default function Dashboard() {
               <Brain className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{accuracy}%</div>
+              <div className="text-2xl font-bold">{stats.accuracy}%</div>
               <p className="text-xs text-muted-foreground">Based on validation set</p>
             </CardContent>
           </Card>
@@ -120,7 +128,7 @@ export default function Dashboard() {
           <Card className="col-span-3">
             <CardHeader>
               <CardTitle>Tumor Classification Distribution</CardTitle>
-              <CardDescription>Breakdown of detected tumor types</CardDescription>
+              <CardDescription>Breakdown of detected tumor types from current data</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
@@ -156,7 +164,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {MOCK_HISTORY.slice(0, 3).map((report) => (
+              {reports.slice(0, 3).map((report) => (
                 <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-4">
                     <div className="h-12 w-12 rounded-md overflow-hidden bg-muted">
@@ -181,6 +189,11 @@ export default function Dashboard() {
                   </div>
                 </div>
               ))}
+              {reports.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  No reports generated yet. Start a new analysis to see results here.
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

@@ -1,5 +1,4 @@
 import Layout from '@/components/Layout';
-import { MOCK_HISTORY } from '@/lib/mockData';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
@@ -7,13 +6,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Eye, Download, Search, Filter } from 'lucide-react';
 import { useState } from 'react';
-import { TumorType } from '@/lib/types';
+import { useData } from '@/lib/store'; // Import global store
 
 export default function History() {
+  const { reports } = useData(); // Use reports from context
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
 
-  const filteredHistory = MOCK_HISTORY.filter(item => {
+  const filteredHistory = reports.filter(item => {
     const matchesSearch = 
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
       item.patientId.toLowerCase().includes(searchTerm.toLowerCase());
