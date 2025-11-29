@@ -148,107 +148,105 @@ export default function AnalysisResultView({ result, patient }: AnalysisResultPr
       </Card>
 
       {/* Hidden Report Template for PDF Generation */}
-      <div id="report-content" className="bg-white text-black p-8 absolute top-[-10000px] w-[210mm]">
-        <div className="border-b-2 border-gray-800 pb-4 mb-6 flex justify-between items-center">
+      <div id="report-content" style={{ backgroundColor: '#ffffff', color: '#000000', padding: '2rem', position: 'absolute', top: '-10000px', width: '210mm' }}>
+        <div style={{ borderBottom: '2px solid #1f2937', paddingBottom: '1rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 className="text-3xl font-bold text-blue-900">NEUROSCAN AI</h1>
-            <p className="text-sm text-gray-500">Advanced Brain Tumor Detection System</p>
+            <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1e3a8a', margin: 0 }}>NEUROSCAN AI</h1>
+            <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '0.25rem 0 0 0' }}>Advanced Brain Tumor Detection System</p>
           </div>
-          <div className="text-right">
-            <p className="font-bold">CONFIDENTIAL MEDICAL REPORT</p>
-            <p className="text-sm">Date: {new Date().toLocaleDateString()}</p>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ fontWeight: 'bold', margin: 0 }}>CONFIDENTIAL MEDICAL REPORT</p>
+            <p style={{ fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>Date: {new Date().toLocaleDateString()}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-8 mb-8">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
           <div>
-            <h3 className="font-bold border-b mb-2">PATIENT DETAILS</h3>
-            <p><span className="font-semibold">Name:</span> {patient.name}</p>
-            <p><span className="font-semibold">ID:</span> {patient.id}</p>
-            <p><span className="font-semibold">Age/Gender:</span> {patient.age} / {patient.gender}</p>
-            <p><span className="font-semibold">Hospital:</span> {patient.hospitalName}</p>
+            <h3 style={{ fontWeight: 'bold', borderBottom: '1px solid #e5e7eb', marginBottom: '0.5rem', paddingBottom: '0.25rem' }}>PATIENT DETAILS</h3>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Name:</span> {patient.name}</p>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>ID:</span> {patient.id}</p>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Age/Gender:</span> {patient.age} / {patient.gender}</p>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Hospital:</span> {patient.hospitalName}</p>
           </div>
           <div>
-            <h3 className="font-bold border-b mb-2">ANALYSIS SUMMARY</h3>
-            <p><span className="font-semibold">Scan ID:</span> {result.id}</p>
-            <p><span className="font-semibold">Prediction:</span> <span className="uppercase font-bold">{info.name}</span></p>
-            <p><span className="font-semibold">Confidence:</span> {(result.confidence * 100).toFixed(2)}%</p>
-            <p><span className="font-semibold">Model:</span> CNN (VGG16/ResNet50)</p>
+            <h3 style={{ fontWeight: 'bold', borderBottom: '1px solid #e5e7eb', marginBottom: '0.5rem', paddingBottom: '0.25rem' }}>ANALYSIS SUMMARY</h3>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Scan ID:</span> {result.id}</p>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Prediction:</span> <span style={{ textTransform: 'uppercase', fontWeight: 'bold' }}>{info.name}</span></p>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Confidence:</span> {(result.confidence * 100).toFixed(2)}%</p>
+            <p style={{ margin: '0.25rem 0' }}><span style={{ fontWeight: '600' }}>Model:</span> CNN (VGG16/ResNet50)</p>
           </div>
         </div>
 
-        <div className="mb-8">
-           <h3 className="font-bold border-b mb-4">VISUAL ANALYSIS</h3>
-           <div className="flex gap-4">
-             <div className="flex-1">
-                <p className="text-center text-sm mb-1">Original MRI</p>
-                <img src={result.imageUrl} className="w-full h-48 object-contain border" />
+        <div style={{ marginBottom: '2rem' }}>
+           <h3 style={{ fontWeight: 'bold', borderBottom: '1px solid #e5e7eb', marginBottom: '1rem', paddingBottom: '0.25rem' }}>VISUAL ANALYSIS</h3>
+           <div style={{ display: 'flex', gap: '1rem' }}>
+             <div style={{ flex: 1 }}>
+                <p style={{ textAlign: 'center', fontSize: '0.875rem', marginBottom: '0.25rem' }}>Original MRI</p>
+                <img src={result.imageUrl} style={{ width: '100%', height: '12rem', objectFit: 'contain', border: '1px solid #e5e7eb' }} />
              </div>
-             <div className="flex-1">
-                <p className="text-center text-sm mb-1">Tumor Localization (Grad-CAM)</p>
-                {/* Since overlay mix-blend doesn't work well in html2canvas, we show just the cam or side by side, 
-                    but here we try to simulate the overlay by just showing the cam image separately for the printed report */}
-                <img src={result.gradCamUrl || result.imageUrl} className="w-full h-48 object-contain border" />
+             <div style={{ flex: 1 }}>
+                <p style={{ textAlign: 'center', fontSize: '0.875rem', marginBottom: '0.25rem' }}>Tumor Localization (Grad-CAM)</p>
+                <img src={result.gradCamUrl || result.imageUrl} style={{ width: '100%', height: '12rem', objectFit: 'contain', border: '1px solid #e5e7eb' }} />
              </div>
            </div>
         </div>
 
-        <div className="mb-8">
-           <h3 className="font-bold border-b mb-2">CLINICAL CONTEXT</h3>
-           <p className="text-sm mb-2">{info.description}</p>
-           <h4 className="font-semibold text-sm mb-1">Associated Symptoms:</h4>
-           <ul className="list-disc pl-5 text-sm mb-2">
+        <div style={{ marginBottom: '2rem' }}>
+           <h3 style={{ fontWeight: 'bold', borderBottom: '1px solid #e5e7eb', marginBottom: '0.5rem', paddingBottom: '0.25rem' }}>CLINICAL CONTEXT</h3>
+           <p style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>{info.description}</p>
+           <h4 style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.25rem' }}>Associated Symptoms:</h4>
+           <ul style={{ listStyleType: 'disc', paddingLeft: '1.25rem', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
              {info.symptoms.map(s => <li key={s}>{s}</li>)}
            </ul>
-           <h4 className="font-semibold text-sm mb-1">Medical Recommendations:</h4>
-           <ul className="list-disc pl-5 text-sm">
+           <h4 style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.25rem' }}>Medical Recommendations:</h4>
+           <ul style={{ listStyleType: 'disc', paddingLeft: '1.25rem', fontSize: '0.875rem' }}>
              {info.recommendations.map(r => <li key={r}>{r}</li>)}
            </ul>
         </div>
         
-        <div className="mb-8 break-inside-avoid">
-           <h3 className="font-bold border-b mb-4">CONFUSION MATRIX</h3>
-           <div className="w-full flex justify-center">
-              <div className="border p-4 bg-gray-50 w-3/4">
-                <h4 className="text-center text-sm font-semibold mb-2">Model Performance (Validation Set)</h4>
-                <div className="grid grid-cols-5 gap-1 text-xs text-center">
-                  <div className="font-bold"></div>
-                  <div className="font-bold">Glioma</div>
-                  <div className="font-bold">Mening.</div>
-                  <div className="font-bold">Pituitary</div>
-                  <div className="font-bold">No Tumor</div>
+        <div style={{ marginBottom: '2rem', breakInside: 'avoid' }}>
+           <h3 style={{ fontWeight: 'bold', borderBottom: '1px solid #e5e7eb', marginBottom: '1rem', paddingBottom: '0.25rem' }}>CONFUSION MATRIX</h3>
+           <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+              <div style={{ border: '1px solid #e5e7eb', padding: '1rem', backgroundColor: '#f9fafb', width: '75%' }}>
+                <h4 style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Model Performance (Validation Set)</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.25rem', fontSize: '0.75rem', textAlign: 'center' }}>
+                  <div style={{ fontWeight: 'bold' }}></div>
+                  <div style={{ fontWeight: 'bold' }}>Glioma</div>
+                  <div style={{ fontWeight: 'bold' }}>Mening.</div>
+                  <div style={{ fontWeight: 'bold' }}>Pituitary</div>
+                  <div style={{ fontWeight: 'bold' }}>No Tumor</div>
                   
-                  <div className="font-bold flex items-center justify-center">Glioma</div>
-                  <div className="bg-blue-600 text-white p-2">98%</div>
-                  <div className="bg-blue-100 p-2">1%</div>
-                  <div className="bg-blue-50 p-2">0%</div>
-                  <div className="bg-blue-50 p-2">1%</div>
+                  <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Glioma</div>
+                  <div style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '0.5rem' }}>98%</div>
+                  <div style={{ backgroundColor: '#dbeafe', padding: '0.5rem' }}>1%</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>0%</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>1%</div>
 
-                  <div className="font-bold flex items-center justify-center">Mening.</div>
-                  <div className="bg-blue-100 p-2">2%</div>
-                  <div className="bg-blue-600 text-white p-2">96%</div>
-                  <div className="bg-blue-100 p-2">2%</div>
-                  <div className="bg-blue-50 p-2">0%</div>
+                  <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Mening.</div>
+                  <div style={{ backgroundColor: '#dbeafe', padding: '0.5rem' }}>2%</div>
+                  <div style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '0.5rem' }}>96%</div>
+                  <div style={{ backgroundColor: '#dbeafe', padding: '0.5rem' }}>2%</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>0%</div>
 
-                  <div className="font-bold flex items-center justify-center">Pituitary</div>
-                  <div className="bg-blue-50 p-2">0%</div>
-                  <div className="bg-blue-100 p-2">1%</div>
-                  <div className="bg-blue-600 text-white p-2">99%</div>
-                  <div className="bg-blue-50 p-2">0%</div>
+                  <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Pituitary</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>0%</div>
+                  <div style={{ backgroundColor: '#dbeafe', padding: '0.5rem' }}>1%</div>
+                  <div style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '0.5rem' }}>99%</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>0%</div>
 
-                  <div className="font-bold flex items-center justify-center">No Tumor</div>
-                  <div className="bg-blue-50 p-2">1%</div>
-                  <div className="bg-blue-50 p-2">0%</div>
-                  <div className="bg-blue-50 p-2">0%</div>
-                  <div className="bg-blue-600 text-white p-2">99%</div>
+                  <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No Tumor</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>1%</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>0%</div>
+                  <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem' }}>0%</div>
+                  <div style={{ backgroundColor: '#2563eb', color: '#ffffff', padding: '0.5rem' }}>99%</div>
                 </div>
               </div>
            </div>
         </div>
 
-        <div className="mt-12 pt-4 border-t text-xs text-center text-gray-400">
-          <p>This report is generated by an AI Diagnostic Support System. It should be reviewed by a certified radiologist.</p>
-          <p>NeuroScan AI v1.0.0</p>
+        <div style={{ marginTop: '3rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb', fontSize: '0.75rem', textAlign: 'center', color: '#9ca3af' }}>
+          <p style={{ margin: 0 }}>This report is generated by an AI Diagnostic Support System. It should be reviewed by a certified radiologist.</p>
+          <p style={{ margin: 0 }}>NeuroScan AI v1.0.0</p>
         </div>
       </div>
     </div>
