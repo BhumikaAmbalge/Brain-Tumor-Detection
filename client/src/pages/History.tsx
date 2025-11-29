@@ -4,14 +4,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Eye, Download, Search, Filter } from 'lucide-react';
+import { Eye, Download, Search, Filter, X } from 'lucide-react';
 import { useState } from 'react';
-import { useData } from '@/lib/store'; // Import global store
+import { useData } from '@/lib/store';
+import AnalysisResultView from '@/components/AnalysisResult';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 export default function History() {
-  const { reports } = useData(); // Use reports from context
+  const { reports } = useData();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
+  const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
 
   const filteredHistory = reports.filter(item => {
     const matchesSearch = 
@@ -20,6 +23,8 @@ export default function History() {
     const matchesFilter = filterType === 'all' || item.tumorType === filterType;
     return matchesSearch && matchesFilter;
   });
+
+  const selectedReport = reports.find(r => r.id === selectedReportId);
 
   return (
     <Layout>
@@ -94,12 +99,25 @@ export default function History() {
                       <TableCell className="text-muted-foreground">{record.hospitalName}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon" title="View Details">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" title="Download Report">
-                            <Download className="h-4 w-4" />
-                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                title="View Details"
+                                onClick={() => setSelectedReportId(record.id)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            {selectedReport && (
+                              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                                <div className="mt-4">
+                                  <AnalysisResultView result={selectedReport} patient={selectedReport} />
+                                </div>
+                              </DialogContent>
+                            )}
+                          </Dialog>
                         </div>
                       </TableCell>
                     </TableRow>
