@@ -4,7 +4,7 @@ import { TUMOR_INFO } from '@/lib/mockData';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Download, AlertCircle, CheckCircle2, Eye } from 'lucide-react';
+import { Download, AlertCircle, CheckCircle2, Eye, ClipboardList } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
@@ -130,6 +130,18 @@ export default function AnalysisResultView({ result, patient }: AnalysisResultPr
                   </ul>
                 </div>
               )}
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Recommendations</h3>
+                <ul className="grid grid-cols-1 gap-2">
+                  {info.recommendations.map((rec, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <ClipboardList className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                      {rec}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -185,8 +197,12 @@ export default function AnalysisResultView({ result, patient }: AnalysisResultPr
            <h3 className="font-bold border-b mb-2">CLINICAL CONTEXT</h3>
            <p className="text-sm mb-2">{info.description}</p>
            <h4 className="font-semibold text-sm mb-1">Associated Symptoms:</h4>
-           <ul className="list-disc pl-5 text-sm">
+           <ul className="list-disc pl-5 text-sm mb-2">
              {info.symptoms.map(s => <li key={s}>{s}</li>)}
+           </ul>
+           <h4 className="font-semibold text-sm mb-1">Medical Recommendations:</h4>
+           <ul className="list-disc pl-5 text-sm">
+             {info.recommendations.map(r => <li key={r}>{r}</li>)}
            </ul>
         </div>
         

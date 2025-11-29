@@ -72,21 +72,48 @@ export const TUMOR_INFO = {
   glioma: {
     name: 'Glioma',
     description: 'A type of tumor that occurs in the brain and spinal cord.',
-    symptoms: ['Headaches', 'Nausea or vomiting', 'Confusion or decline in brain function', 'Memory loss', 'Personality changes or irritability', 'Difficulty with balance', 'Urinary incontinence', 'Vision problems', 'Speech difficulties', 'Seizures']
+    symptoms: ['Headaches', 'Nausea or vomiting', 'Confusion or decline in brain function', 'Memory loss', 'Personality changes or irritability', 'Difficulty with balance', 'Urinary incontinence', 'Vision problems', 'Speech difficulties', 'Seizures'],
+    recommendations: [
+      'Consult a neurologist or neuro-oncologist immediately.',
+      'MRI with contrast to determine tumor grade.',
+      'Biopsy may be required for definitive diagnosis.',
+      'Treatment options typically include surgery, radiation therapy, and chemotherapy.',
+      'Regular follow-up scans to monitor tumor growth.'
+    ]
   },
   meningioma: {
     name: 'Meningioma',
     description: 'A tumor that arises from the meninges — the membranes that surround your brain and spinal cord.',
-    symptoms: ['Changes in vision, such as seeing double or blurriness', 'Headaches, especially those that are worse in the morning', 'Hearing loss or ringing in the ears', 'Memory loss', 'Loss of smell', 'Seizures', 'Weakness in your arms or legs', 'Language difficulty']
+    symptoms: ['Changes in vision, such as seeing double or blurriness', 'Headaches, especially those that are worse in the morning', 'Hearing loss or ringing in the ears', 'Memory loss', 'Loss of smell', 'Seizures', 'Weakness in your arms or legs', 'Language difficulty'],
+    recommendations: [
+      'Consult a neurosurgeon for evaluation.',
+      'Watchful waiting (active surveillance) if the tumor is small and asymptomatic.',
+      'Surgical removal is the most common treatment.',
+      'Radiation therapy if surgery is not possible or for recurrent tumors.',
+      'Regular neurological exams and imaging.'
+    ]
   },
   pituitary: {
     name: 'Pituitary Tumor',
     description: 'Abnormal growths that develop in your pituitary gland.',
-    symptoms: ['Headache', 'Vision loss', 'Nausea or vomiting', 'Weakness', 'Feeling cold', 'Less frequent or no menstrual periods', 'Body hair loss', 'Sexual dysfunction', 'Increased amount of urine']
+    symptoms: ['Headache', 'Vision loss', 'Nausea or vomiting', 'Weakness', 'Feeling cold', 'Less frequent or no menstrual periods', 'Body hair loss', 'Sexual dysfunction', 'Increased amount of urine'],
+    recommendations: [
+      'Endocrinologist consultation to check hormone levels.',
+      'Visual field testing by an ophthalmologist.',
+      'Medication to shrink the tumor or regulate hormones.',
+      'Transsphenoidal surgery (through the nose) if vision is affected.',
+      'Radiation therapy for persistent tumors.'
+    ]
   },
   notumor: {
     name: 'No Tumor Detected',
     description: 'No abnormalities detected in the MRI scan.',
-    symptoms: []
+    symptoms: [],
+    recommendations: [
+      'No immediate medical intervention required regarding brain tumors.',
+      'Maintain a healthy lifestyle.',
+      'Consult a doctor if symptoms persist (e.g., chronic headaches) for other potential causes.',
+      'Routine check-ups as advised by your primary care physician.'
+    ]
   }
 };
