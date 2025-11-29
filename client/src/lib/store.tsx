@@ -30,11 +30,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         setReports(MOCK_HISTORY); // Fallback
       }
     } else {
-      // Initialize with some data so the dashboard isn't empty initially, 
-      // or start empty if preferred. Let's keep mock data for "demo" feel 
-      // but allow adding to it.
-      setReports(MOCK_HISTORY);
-      localStorage.setItem('neuroscan_reports', JSON.stringify(MOCK_HISTORY));
+      // Initialize empty if no saved data
+      setReports([]);
+      localStorage.setItem('neuroscan_reports', JSON.stringify([]));
     }
   }, []);
 

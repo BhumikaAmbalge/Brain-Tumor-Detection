@@ -15,17 +15,28 @@ export default function Dashboard() {
     { name: 'No Tumor', value: reports.filter(r => r.tumorType === 'notumor').length, color: 'hsl(var(--muted))' },
   ];
 
-  // Mock weekly activity data since we don't have real historical dates for everything in this prototype
-  // In a real app, we would aggregate `reports` by date.
-  const weeklyActivity = [
-    { name: 'Mon', scans: 45, detected: 30 },
-    { name: 'Tue', scans: 52, detected: 35 },
-    { name: 'Wed', scans: 48, detected: 32 },
-    { name: 'Thu', scans: 60, detected: 40 },
-    { name: 'Fri', scans: 55, detected: 38 },
-    { name: 'Sat', scans: 25, detected: 15 },
-    { name: 'Sun', scans: 18, detected: 10 },
-  ];
+  // Calculate weekly activity dynamically from real reports
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weeklyActivity = days.map(day => {
+    // In a real app with more data, we'd filter by actual dates falling on this day of the current week
+    // For this prototype, we'll just mock empty or count loosely based on day string if we had it, 
+    // but simpler is to just show 0 if no data for that day.
+    
+    // Let's just aggregate all reports by day of week for the chart
+    const dayReports = reports.filter(r => {
+      const reportDate = new Date(r.date);
+      return days[reportDate.getDay()] === day;
+    });
+    
+    return {
+      name: day,
+      scans: dayReports.length,
+      detected: dayReports.filter(r => r.tumorType !== 'notumor').length
+    };
+  });
+  // Reorder to start from Monday for the chart visual preference if needed, or keep Sun-Sat
+  // Let's rotate to Mon-Sun
+  const rotatedWeeklyActivity = [...weeklyActivity.slice(1), weeklyActivity[0]];
 
   return (
     <Layout>
@@ -96,7 +107,7 @@ export default function Dashboard() {
             <CardContent className="pl-2">
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={weeklyActivity}>
+                  <BarChart data={rotatedWeeklyActivity}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" vertical={false} />
                     <XAxis 
                       dataKey="name" 
