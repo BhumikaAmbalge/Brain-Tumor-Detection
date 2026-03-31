@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain Tumor Detection Demo</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f4f8; text-align:center; margin:0; padding:0; }
+  header { background:#3f51b5; color:white; padding:1rem; }
+  .upload-section, .result-section { margin:2rem auto; padding:1rem; max-width:650px; background:white; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+  input[type=file] { margin:1rem 0; }
+  button { padding:0.5rem 1.5rem; border:none; background:#8894d8; color:white; border-radius:5px; cursor:pointer; }
+  button:hover { background:#99a1d6; }
+  .loader { display:none; border:4px solid #f3f3f3; border-top:4px solid #3f51b5; border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite; margin:1rem auto;}
+  @keyframes spin {0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+  .image-container { position: relative; display:inline-block; max-width:100%; }
+  #previewImg, #heatmapCanvas { max-width: 100%; border-radius:10px; }
+  #heatmapCanvas { position:absolute; top:0; left:0; pointer-events:none; }
+  canvas.chart-canvas { margin-top:1rem; }
+  #predictionText { font-weight:bold; margin-top:1rem; font-size:18px; }
+  #reportText { font-weight:bold; margin-top:1rem; font-size:20px; padding:10px; border-radius:8px; display:inline-block; }
+  .healthy { background:#66bb6a; color:white; }
+  .tumor { background:#e53935; color:white; }
+  footer { text-align:center; padding:15px; background:#ecf0f1; margin-top:30px;}
+  .charts-container { display: flex; justify-content: space-around; flex-wrap: wrap; margin-top:20px; }
+  .chart-box { flex:1 1 45%; min-width:250px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Brain Tumor Detection Demo</h1>
+  <button id="logoutBtn" style="float:right; margin-top:-2.5rem; margin-right:1rem;">Logout</button>
+</header>
+
+<section class="upload-section">
+  <h2>Upload MRI Scan</h2>
+  <div>
+    <input type="file" accept="image/*" id="mriInput">
+    <button id="analyzeBtn">Analyze</button>
+    <div class="loader" id="loader"></div>
+    <div class="image-container">
+      <img id="previewImg" alt="">
+      <canvas id="heatmapCanvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="result-section">
+  <h2>Prediction Confidence</h2>
+  <p id="predictionText">Upload an MRI scan to see tumor type and percentage.</p>
+  
+  <div class="charts-container">
+    <div class="chart-box">
+      <canvas id="predictionBar" class="chart-canvas"></canvas>
+    </div>
+    <div class="chart-box">
+      <canvas id="predictionPie" class="chart-canvas"></canvas>
+    </div>
+  </div>
+
+  <div id="reportText">Report will be displayed here.</div>
+</section>
+
+<script>
+const input = document.getElementById('mriInput');
+const preview = document.getElementById('previewImg');
+const loader = document.getElementById('loader');
+const heatmapCanvas = document.getElementById('heatmapCanvas');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const predictionText = document.getElementById('predictionText');
+const reportText = document.getElementById('reportText');
+
+// Chart instances
+let barChart, pieChart;
+
+// Show image preview
+input.addEventListener('change', function(){
+  const file = this.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      preview.onload = function(){
+        heatmapCanvas.width = preview.width;
+        heatmapCanvas.height = preview.height;
+        const ctx = heatmapCanvas.getContext('2d');
+        ctx.clearRect(0,0,heatmapCanvas.width,heatmapCanvas.height);
+      }
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+// Handle Analyze click
+analyzeBtn.addEventListener('click', function(e){
+  e.preventDefault();
+  if(input.files.length === 0) return alert('Please upload an MRI scan.');
+  loader.style.display = 'block';
+
+  setTimeout(() => {
+    loader.style.display = 'none';
+
+    // Simulated tumor prediction data
+    const prediction = {
+      "Pituitary": Math.floor(Math.random()*100),
+      "Glioma": Math.floor(Math.random()*100),
+      "Meningioma": Math.floor(Math.random()*100),
+      "No Tumor": Math.floor(Math.random()*100)
+    };
+    const total = Object.values(prediction).reduce((a,b)=>a+b,0);
+    Object.keys(prediction).forEach(k => prediction[k] = ((prediction[k]/total)*100).toFixed(2));
+
+    // Determine top prediction
+    const sorted = Object.entries(prediction).sort((a,b)=>b[1]-a[1]);
+    const topTumor = sorted[0][0];
+    const topConfidence = sorted[0][1];
+    predictionText.textContent = `Predicted Tumor: ${topTumor} (${topConfidence}%)`;
+
+    // Show Report (Healthy or Tumor)
+    if(topTumor === "No Tumor"){
+      reportText.textContent = "Report: Healthy (No Tumor Detected)";
+      reportText.className = "healthy";
+    } else {
+      reportText.textContent = "Report: Tumor Detected";
+      reportText.className = "tumor";
+    }
+
+    // Draw heatmap overlay
+    const ctx = heatmapCanvas.getContext('2d');
+    ctx.clearRect(0,0,heatmapCanvas.width,heatmapCanvas.height);
+    const gradient = ctx.createRadialGradient(
+      heatmapCanvas.width/2, heatmapCanvas.height/2, 20,
+      heatmapCanvas.width/2, heatmapCanvas.height/2, heatmapCanvas.width/2
+    );
+    gradient.addColorStop(0,'rgba(255,0,0,0.5)');
+    gradient.addColorStop(1,'rgba(255,255,0,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0,0,heatmapCanvas.width,heatmapCanvas.height);
+
+    // Chart data
+    const labels = Object.keys(prediction);
+    const values = Object.values(prediction);
+
+    // Destroy old charts if exist
+    if(barChart) barChart.destroy();
+    if(pieChart) pieChart.destroy();
+
+    // Bar Chart
+    const barCtx = document.getElementById('predictionBar').getContext('2d');
+    barChart = new Chart(barCtx,{
+      type:'bar',
+      data:{ labels: labels, datasets:[{ label:'Confidence (%)', data: values, backgroundColor:'#3f51b5'}] },
+      options:{ scales:{ y:{ beginAtZero:true, max:100 } } }
+    });
+
+    // Pie Chart
+    const pieCtx = document.getElementById('predictionPie').getContext('2d');
+    pieChart = new Chart(pieCtx,{
+      type:'pie',
+      data:{ 
+        labels: labels, 
+        datasets:[{ 
+          data: values, 
+          backgroundColor:['#3f51b5','#ff7043','#66bb6a','#ffa726'] 
+        }] 
+      }
+    });
+
+  }, 1000);
+});
+
+// Logout
+    logoutBtn.addEventListener("click", () => {
+      // You could clear local/session storage here if used
+      window.location.href = "login.html"; // adjust the path if needed
+    });
+</script>
+<script src="script.js"></script>
+<footer>
+  <p>&copy; 2025 Brain Tumor Detection Demo</p>
+</footer>
+
+</body>
+</html>
