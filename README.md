@@ -58,8 +58,7 @@ A MERN-based web application is developed to allow users to upload MRI images an
 ---
 
 
-=======
-<<<<<<< HEAD
+
 # Brain Tumor Detection Using Deep Learning
 
 A medical imaging application that automatically detects the presence of brain tumors from MRI images using deep learning techniques. The system helps doctors and medical professionals in early diagnosis and treatment planning.
